@@ -1,7 +1,8 @@
-import RootPage from "./pages/RootPage";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./router";
 
 function App() {
-  return <RootPage />;
+  return <RouterProvider router={router} />;
 }
 
 export default App;
