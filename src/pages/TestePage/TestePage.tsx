@@ -1,5 +1,7 @@
+import Editor from "../../components/Editor/Editor";
+
 const TestePage = () => {
-  return <h1>Teste</h1>;
+  return <Editor />;
 };
 
 export default TestePage;
