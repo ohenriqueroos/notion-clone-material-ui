@@ -24,11 +24,12 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ChatIcon from "@mui/icons-material/Chat";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import SaveIcon from "@mui/icons-material/Save";
+import MicIcon from "@mui/icons-material/Mic";
 
 import "highlight.js/styles/tokyo-night-dark.css";
 import BubbleButton from "./BubbleButton";
 import FloatingButton from "./FloatingButton";
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, IconButton, Stack } from "@mui/material";
 
 lowlight.registerLanguage("html", html);
 lowlight.registerLanguage("ts", ts);
@@ -67,10 +68,13 @@ const Editor = () => {
 
   return (
     <Box py={5} px={15}>
-      <Stack alignItems={"end"}>
+      <Stack direction={"row"} justifyContent={"end"}>
         <Button variant="text" startIcon={<SaveIcon />} onClick={onSaveHandler}>
           Salvar
         </Button>
+        <IconButton color="primary">
+          <MicIcon />
+        </IconButton>
       </Stack>
       <EditorContent editor={editor} style={{ border: "none" }} />
       {editor && (
