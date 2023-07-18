@@ -18,6 +18,7 @@ const RootPage = () => {
           backgroundColor: "#141414",
           minHeight: "100vh",
           width: "100%",
+          paddingLeft: isMenuOpen ? 240 : 70,
         }}
       >
         <Outlet />

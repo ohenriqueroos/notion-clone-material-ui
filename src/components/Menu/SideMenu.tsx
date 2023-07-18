@@ -10,7 +10,7 @@ interface ISideMenuProps {
 }
 
 const activeStyle = {
-  color: "#21A635",
+  color: "#3e92a7",
   textDecoration: "none",
   display: "flex",
   gap: 10,
@@ -37,7 +37,12 @@ const SideMenu = ({ isMenuOpen, toggleMenuHandler }: ISideMenuProps) => {
         backgroundColor: "#333333",
         color: "#fff",
         width: isMenuOpen ? "15%" : "4%",
-        height: "100vh",
+        height: "90vh",
+        position: "fixed",
+        top: "5vh",
+        borderRadius: "0px 10px 10px 0px",
+        border: "1px solid #606060",
+        borderLeft: "0px",
       }}
     >
       <Grid
