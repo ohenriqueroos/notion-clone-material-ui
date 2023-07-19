@@ -1,15 +1,48 @@
-import { ComponentProps, ReactNode } from "react";
+import { Button, IconButton } from "@mui/material";
+import { ReactNode } from "react";
 
-export interface IBubbleButtonProps extends ComponentProps<"button"> {
-  children: ReactNode;
+interface IBubbleButton {
+  children?: string;
+  icon: ReactNode;
+  onClick?: () => void;
 }
 
-const BubbleButton = (props: IBubbleButtonProps) => {
+const BubbleButton = ({ children, icon, onClick }: IBubbleButton) => {
   return (
-    <button
-      className="p-2 text-zinc-200 text-sm flex items-center gap-1.5 font-medium leading-none hover:text-zinc-50 hover:bg-zinc-600 data-[active=true]:text-violet-400"
-      {...props}
-    />
+    <>
+      {children && (
+        <Button
+          startIcon={icon}
+          onClick={onClick}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: "#333333",
+            ":hover": { backgroundColor: "#414141" },
+            border: "1px solid #606060",
+            color: "#fff",
+            gap: 1,
+            width: "fit-content",
+          }}
+          size="small"
+        >
+          {children}
+        </Button>
+      )}
+      {!children && (
+        <IconButton
+          size="small"
+          sx={{
+            backgroundColor: "#333333",
+            ":hover": { backgroundColor: "#414141" },
+            border: "1px solid #606060",
+            color: "#fff",
+          }}
+        >
+          {icon}
+        </IconButton>
+      )}
+    </>
   );
 };
 

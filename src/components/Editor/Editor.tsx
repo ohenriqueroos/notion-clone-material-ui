@@ -5,7 +5,6 @@ import {
   FloatingMenu,
 } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { initialContent } from "./initialContent";
 import { lowlight } from "lowlight";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
 import html from "highlight.js/lib/languages/xml";
@@ -30,11 +29,17 @@ import "highlight.js/styles/tokyo-night-dark.css";
 import BubbleButton from "./BubbleButton";
 import FloatingButton from "./FloatingButton";
 import { Box, Button, IconButton, Stack } from "@mui/material";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
+import { useEffect, useState } from "react";
 
 lowlight.registerLanguage("html", html);
 lowlight.registerLanguage("ts", ts);
 
 const Editor = () => {
+  const [content, setContent] = useState<string>("");
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -50,8 +55,53 @@ const Editor = () => {
       TableHeader,
       TableCell,
     ],
-    content: initialContent,
+    content: content,
   });
+
+  const commands = [
+    {
+      command: "criar título um",
+      callback: () => {
+        editor!
+          .chain()
+          .focus()
+          .toggleHeading({ level: 1 })
+          .run();
+      },
+    },
+    {
+      command: "criar título 2",
+      callback: () => {
+        editor!
+          .chain()
+          .focus()
+          .toggleHeading({ level: 2 })
+          .run();
+      },
+    },
+    {
+      command: "criar título 3",
+      callback: () => {
+        editor!
+          .chain()
+          .focus()
+          .toggleHeading({ level: 3 })
+          .run();
+      },
+    },
+  ];
+
+  const {
+    transcript,
+    listening,
+    // browserSupportsSpeechRecognition,
+  } = useSpeechRecognition({ commands });
+
+  console.log(transcript);
+
+  useEffect(() => {
+    if (transcript && listening) setContent(transcript);
+  }, [transcript, listening]);
 
   const onTypeTextHandler = () => {
     if (editor) {
@@ -72,7 +122,12 @@ const Editor = () => {
         <Button variant="text" startIcon={<SaveIcon />} onClick={onSaveHandler}>
           Salvar
         </Button>
-        <IconButton color="primary">
+        <IconButton
+          color="primary"
+          onClick={() =>
+            SpeechRecognition.startListening({ language: "pt-BR" })
+          }
+        >
           <MicIcon />
         </IconButton>
       </Stack>
@@ -116,7 +171,11 @@ const Editor = () => {
               image={<TextFieldsIcon />}
               alt="heading 1"
               onClick={() => {
-                editor.chain().focus().toggleHeading({ level: 1 }).run();
+                editor
+                  .chain()
+                  .focus()
+                  .toggleHeading({ level: 1 })
+                  .run();
                 onTypeTextHandler();
               }}
             />
@@ -127,7 +186,11 @@ const Editor = () => {
               image={<TextFieldsIcon />}
               alt="heading 2"
               onClick={() => {
-                editor.chain().focus().toggleHeading({ level: 2 }).run();
+                editor
+                  .chain()
+                  .focus()
+                  .toggleHeading({ level: 2 })
+                  .run();
                 onTypeTextHandler();
               }}
             />
@@ -138,7 +201,11 @@ const Editor = () => {
               image={<TextFieldsIcon />}
               alt="heading 3"
               onClick={() => {
-                editor.chain().focus().toggleHeading({ level: 3 }).run();
+                editor
+                  .chain()
+                  .focus()
+                  .toggleHeading({ level: 3 })
+                  .run();
                 onTypeTextHandler();
               }}
             />
@@ -149,7 +216,11 @@ const Editor = () => {
               image={<TextFieldsIcon />}
               alt="ordered list"
               onClick={() => {
-                editor.chain().focus().toggleOrderedList().run();
+                editor
+                  .chain()
+                  .focus()
+                  .toggleOrderedList()
+                  .run();
                 onTypeTextHandler();
               }}
             />
@@ -160,7 +231,11 @@ const Editor = () => {
               image={<TextFieldsIcon />}
               alt="bullet list"
               onClick={() => {
-                editor.chain().focus().toggleBulletList().run();
+                editor
+                  .chain()
+                  .focus()
+                  .toggleBulletList()
+                  .run();
                 onTypeTextHandler();
               }}
             />
@@ -171,7 +246,11 @@ const Editor = () => {
               image={<CodeIcon />}
               alt="code"
               onClick={() => {
-                editor.chain().focus().toggleCodeBlock().run();
+                editor
+                  .chain()
+                  .focus()
+                  .toggleCodeBlock()
+                  .run();
                 onTypeTextHandler();
               }}
             />
@@ -182,7 +261,11 @@ const Editor = () => {
               image={<TextFieldsIcon />}
               alt="quote"
               onClick={() => {
-                editor.chain().focus().toggleBlockquote().run();
+                editor
+                  .chain()
+                  .focus()
+                  .toggleBlockquote()
+                  .run();
                 onTypeTextHandler();
               }}
             />
@@ -209,39 +292,46 @@ const Editor = () => {
           className="bg-zinc-700 shadow-xl border border-zinc-600 shadow-black/20 rounded-lg overflow-hidden flex divide-x divide-zinc-600"
           editor={editor}
         >
-          <BubbleButton>
+          <BubbleButton icon={<ExpandMoreIcon className="w-4 h-4" />}>
             Text
-            <ExpandMoreIcon className="w-4 h-4" />
           </BubbleButton>
-          <BubbleButton>
+          <BubbleButton icon={<ChatIcon className="w-4 h-4" />}>
             Comment
-            <ChatIcon className="w-4 h-4" />
           </BubbleButton>
           <div className="flex items-center">
             <BubbleButton
-              onClick={() => editor.chain().focus().toggleBold().run()}
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleBold()
+                  .run()
+              }
               data-active={editor.isActive("bold")}
-            >
-              <FormatBoldIcon className="w-4 h-4" />
-            </BubbleButton>
+              icon={<FormatBoldIcon className="w-4 h-4" />}
+            />
             <BubbleButton
-              onClick={() => editor.chain().focus().toggleItalic().run()}
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleItalic()
+                  .run()
+              }
               data-active={editor.isActive("italic")}
-            >
-              <FormatItalicIcon className="w-4 h-4" />
-            </BubbleButton>
+              icon={<FormatItalicIcon className="w-4 h-4" />}
+            />
             <BubbleButton
-              onClick={() => editor.chain().focus().toggleStrike().run()}
+              onClick={() =>
+                editor
+                  .chain()
+                  .focus()
+                  .toggleStrike()
+                  .run()
+              }
               data-active={editor.isActive("strike")}
-            >
-              <FormatStrikethroughIcon className="w-4 h-4" />
-            </BubbleButton>
-            <BubbleButton
-              onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-              data-active={editor.isActive("codeBlock")}
-            >
-              <CodeIcon className="w-4 h-4" />
-            </BubbleButton>
+              icon={<FormatStrikethroughIcon className="w-4 h-4" />}
+            />
           </div>
         </BubbleMenu>
       )}
